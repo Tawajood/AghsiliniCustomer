@@ -206,7 +206,8 @@ data class Item(
     @SerializedName("argent_price" ) var argentPrice : Int?    = null,
     @SerializedName("created_at"   ) var createdAt   : String? = null,
     @SerializedName("updated_at"   ) var updatedAt   : String? = null,
-    @SerializedName("name"         ) var name        : String? = null
+    @SerializedName("name"         ) var name        : String? = null,
+    @SerializedName("service" ) var service : ServiceInLaundry?    = null,
 
 ) : Parcelable
 
