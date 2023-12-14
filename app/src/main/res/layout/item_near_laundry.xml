@@ -9,8 +9,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/_2sdp"
-    android:layout_marginEnd="@dimen/_5sdp"    android:layoutDirection="rtl"
+        android:layout_marginVertical="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layoutDirection="rtl"
         app:cardCornerRadius="@dimen/_8sdp"
         app:strokeColor="@color/light_grey"
         app:strokeWidth="@dimen/_1sdp">
@@ -40,7 +41,8 @@
                 android:layout_marginHorizontal="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:drawableEnd="@drawable/ic_star_sel"
-          android:drawablePadding="@dimen/_5sdp"      android:text="4.9"
+                android:drawablePadding="@dimen/_5sdp"
+                android:text="4.9"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"

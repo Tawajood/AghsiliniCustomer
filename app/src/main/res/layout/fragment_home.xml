@@ -149,8 +149,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:text="@string/top_rated_laundry"
                         android:textColor="@color/grey_dark"
-                        android:textSize="@dimen/_16sdp"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/_14sdp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
