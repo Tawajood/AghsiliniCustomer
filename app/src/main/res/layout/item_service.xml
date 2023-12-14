@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_width="wrap_content"
+      android:layout_marginEnd="@dimen/_4sdp"  android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+
+            android:id="@+id/card_back"
+            android:layout_width="@dimen/_27sdp"
+            android:layout_height="@dimen/_27sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
+      android:clickable="true"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:focusable="true"
+            app:cardCornerRadius="@dimen/_40sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/iv_logo"
+       android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+             android:padding="@dimen/_5sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_washer_tst"
+            />
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+    android:id="@+id/tv_title"        android:layout_width="wrap_content"
+          android:layout_marginStart="@dimen/_4sdp"  android:layout_height="wrap_content"
+app:layout_constraintTop_toTopOf="@id/card_back"
+      android:textSize="@dimen/_12sdp"      app:layout_constraintBottom_toBottomOf="@id/card_back"
+       android:textColor="@color/white"     android:text="غسيل جاف"
+app:layout_constraintStart_toEndOf="@id/card_back"
+    />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
