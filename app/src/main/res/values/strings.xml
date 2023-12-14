@@ -62,6 +62,7 @@
     <string name="sub_total">إجمالى سعر القطع</string>
     <string name="delivery_fees">سعر التوصيل</string>
     <string name="tax_Service">الضريبة</string>
+    <string name="additional_cost">تكلفة اضافية</string>
     <string name="total">الإجمالى</string>
     <string name="signin_first">سجل أولا بالتطبيق</string>
     <string name="sign_in_">يمكنك طلب غسيل المنتجات التى تحتاجها و لكن بعد تسجيل الدخول أولا</string>

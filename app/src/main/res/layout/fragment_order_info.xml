@@ -130,7 +130,7 @@
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="gone"        android:id="@+id/lyt_data"
+                    android:visibility="visible"        android:id="@+id/lyt_data"
             android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -467,7 +467,27 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/tv_tax" />
 
+                        <TextView
+                            android:id="@+id/tv_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:text="@string/additional_cost"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/_12sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_tax_value" />
 
+
+                        <TextView
+                            android:id="@+id/tv_add_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/grey_dark"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_add"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_add" />
                         <View
                             android:id="@+id/view"
                             android:layout_width="match_parent"
@@ -476,7 +496,7 @@
                             android:background="@color/white"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_tax_value" />
+                            app:layout_constraintTop_toBottomOf="@+id/tv_add_value" />
 
                         <TextView
                             android:id="@+id/tv_total"
