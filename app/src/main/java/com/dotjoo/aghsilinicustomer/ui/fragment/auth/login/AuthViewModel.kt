@@ -11,16 +11,19 @@ import com.dotjoo.aghsilinicustomer.data.Param.LoginParams
 import com.dotjoo.aghsilinicustomer.data.Param.RegisterParams
 import com.dotjoo.aghsilinicustomer.data.Param.ResetPasswordParams
 import com.dotjoo.aghsilinicustomer.data.remote.response.LoginResponse
+import com.dotjoo.aghsilinicustomer.data.remote.response.TermsResponse
 import com.dotjoo.aghsilinicustomer.util.NetworkConnectivity
 import com.dotjoo.aghsilinicustomer.util.Resource
 import com.dotjoo.aghsilinicustomer.domain.AuthUseCase
+import com.dotjoo.aghsilinicustomer.domain.SettingUseCase
+import com.dotjoo.aghsilinicustomer.ui.fragment.main.settingFragments.SettingAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(app: Application, val authUserCase: AuthUseCase) :
+class AuthViewModel @Inject constructor(app: Application, val authUserCase: AuthUseCase,val useCase: SettingUseCase) :
     BaseViewModel<AuthAction>(app) {
     var email: String? = null
     var otp: String? = null
@@ -270,5 +273,27 @@ fun isValidParamsChangePass(countryCode: String,    newpass: String, confirmpass
         }
     }
 
+    fun getTerms() {
+        if (app.let { it1 -> NetworkConnectivity.hasInternetConnection(it1) } == true) {
+            produce(AuthAction.ShowLoading(true))
 
+            viewModelScope.launch {
+                var res = useCase.invoke(
+                    viewModelScope , SettingUseCase.Terms_
+                )
+                { res ->
+                    when (res) {
+                        is Resource.Failure -> produce(AuthAction.ShowFailureMsg(res.message.toString()))
+                        is Resource.Progress -> produce(AuthAction.ShowLoading(res.loading))
+                        is Resource.Success -> {
+                            produce(AuthAction.ShowTerms(res.data?.data as TermsResponse))
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            produce(AuthAction.ShowFailureMsg(getString(R.string.no_internet)))
+        }
+    }
 }

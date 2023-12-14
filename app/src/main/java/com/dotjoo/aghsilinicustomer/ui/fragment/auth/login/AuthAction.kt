@@ -3,6 +3,8 @@ package com.dotjoo.aghsilinicustomer.ui.fragment.auth.login
 import com.dotjoo.aghsilinicustomer.base.Action
 import com.dotjoo.aghsilinicustomer.data.Param.RegisterParams
 import com.dotjoo.aghsilinicustomer.data.remote.response.LoginResponse
+import com.dotjoo.aghsilinicustomer.data.remote.response.TermsResponse
+import com.dotjoo.aghsilinicustomer.ui.fragment.main.settingFragments.SettingAction
 
 sealed class AuthAction() : Action {
 
@@ -16,10 +18,12 @@ sealed class AuthAction() : Action {
      data  class LogoutSucess(val message: String) : AuthAction()
     data  class LoginSuccess(val data: LoginResponse ) : AuthAction()
     data  class ShowRegisterVaildation(val data: RegisterParams ) : AuthAction()
-  /*  data class EmailChecked(val data: OtpCheckEmailResponse) : AuthAction()
-    data class EmailCheckedAfterRegister(
-        val data: OtpCheckEmailAfterRegisterResponse,
-     ) : AuthAction()
+    data class ShowTerms(val data: TermsResponse) : AuthAction()
 
-    data class OtpChecked(val data : OtpCheckEmailResponse) : AuthAction()*/
+    /*  data class EmailChecked(val data: OtpCheckEmailResponse) : AuthAction()
+      data class EmailCheckedAfterRegister(
+          val data: OtpCheckEmailAfterRegisterResponse,
+       ) : AuthAction()
+
+      data class OtpChecked(val data : OtpCheckEmailResponse) : AuthAction()*/
 }

@@ -28,8 +28,9 @@
         android:id="@+id/forgetPasswordFragment"
         android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.ForgetPasswordFragment"
         android:label="ForgetPasswordFragment" />
+
     <fragment
-        android:id="@+id/termsFragment2"
-        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.settingFragments.TermsFragment"
-        android:label="TermsFragment" />
+        android:id="@+id/termsRegisterFragment"
+        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.register.TermsRegisterFragment"
+        android:label="TermsRegisterFragment" />
 </navigation>

@@ -174,7 +174,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(),
 
         }
         binding.tvTermsandcondito.setOnClickListener {
-            findNavController().navigate(R.id.termsFragment2)
+            findNavController().navigate(R.id.termsRegisterFragment)
 
         }
         binding.etAddress.setOnClickListener {
