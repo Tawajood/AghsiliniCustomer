@@ -110,7 +110,7 @@
                     android:layout_marginTop="@dimen/_40sdp"
                     android:backgroundTint="@color/blue"
                     android:drawableEnd="@drawable/ic_add_white"
-                    android:text="@string/add_balance"
+                    android:textAllCaps="false"    android:text="@string/add_balance"
                     android:textAlignment="viewStart"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"

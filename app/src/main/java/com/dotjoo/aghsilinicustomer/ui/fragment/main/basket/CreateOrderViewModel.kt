@@ -6,15 +6,16 @@ import com.dotjoo.aghsilinicustomer.R
  import com.dotjoo.aghsilinicustomer.base.BaseViewModel
 import com.dotjoo.aghsilinicustomer.data.Param.AddAddressParam
 import com.dotjoo.aghsilinicustomer.data.Param.AddToCartParam
+import com.dotjoo.aghsilinicustomer.data.Param.ChangeCurrentAddressParam
 import com.dotjoo.aghsilinicustomer.data.Param.CreateOrderParam
 import com.dotjoo.aghsilinicustomer.data.Param.DeleteAddressParam
 import com.dotjoo.aghsilinicustomer.data.Param.GetItemsInServiceParam
 import com.dotjoo.aghsilinicustomer.data.Param.IncreaseItemParam
 import com.dotjoo.aghsilinicustomer.data.Param.RemoveItemParam
 import com.dotjoo.aghsilinicustomer.data.remote.response.*
+import com.dotjoo.aghsilinicustomer.domain.AddressUseCase
 import com.dotjoo.aghsilinicustomer.domain.BasketUseCase
-import com.dotjoo.aghsilinicustomer.domain.BasketUseCase.OrderTypes.ALL_ADDRESS
-import com.dotjoo.aghsilinicustomer.domain.CreateOrderUseCase
+ import com.dotjoo.aghsilinicustomer.domain.CreateOrderUseCase
 import com.dotjoo.aghsilinicustomer.domain.SettingWalletUseCase
 import com.dotjoo.aghsilinicustomer.util.NetworkConnectivity
 import com.dotjoo.aghsilinicustomer.util.Resource
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateOrderViewModel
-@Inject constructor(app: Application, val useCase:CreateOrderUseCase, val useCaseWallet:SettingWalletUseCase, val useCase_basket: BasketUseCase) :
+@Inject constructor(app: Application, val useCase:CreateOrderUseCase, val useCaseWallet:SettingWalletUseCase, val useCase_basket: BasketUseCase, val useCase_address: AddressUseCase) :
     BaseViewModel<CreateOrderAction>(app) {
      var urgent = false
      var order_id :String? = null
@@ -192,8 +193,8 @@ fun getAllAddresses(    ) {
             produce(CreateOrderAction.ShowLoading(true))
 
             viewModelScope.launch {
-                var res = useCase_basket.invoke(
-                    viewModelScope , ALL_ADDRESS
+                var res = useCase_address.invoke(
+                    viewModelScope
                 )
                 { res ->
                     when (res) {
@@ -215,7 +216,7 @@ fun getAllAddresses(    ) {
             produce(CreateOrderAction.ShowLoading(true))
 
             viewModelScope.launch {
-                var res = useCase_basket.invoke(
+                var res = useCase_address.invoke(
                     viewModelScope ,param
                 )
                 { res ->
@@ -239,7 +240,7 @@ fun getAllAddresses(    ) {
             produce(CreateOrderAction.ShowLoading(true))
 
             viewModelScope.launch {
-                var res = useCase_basket.invoke(
+                var res = useCase_address.invoke(
                     viewModelScope , item.id?.let { DeleteAddressParam(it) }
                 )
                 { res ->
@@ -248,6 +249,29 @@ fun getAllAddresses(    ) {
                         is Resource.Progress -> produce(CreateOrderAction.ShowLoading(res.loading))
                         is Resource.Success -> {
                             produce(CreateOrderAction.AddressDeleted(res.data?.message   as String, item))
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            produce(CreateOrderAction.ShowFailureMsg(getString(R.string.no_internet)))
+        }
+    }
+  fun changeCurrentAddressParam( item: Address) {
+        if (app.let { it1 -> NetworkConnectivity.hasInternetConnection(it1) } == true) {
+            produce(CreateOrderAction.ShowLoading(true))
+
+            viewModelScope.launch {
+                var res = useCase_address.invoke(
+                    viewModelScope , item.id?.let { ChangeCurrentAddressParam(it) }
+                )
+                { res ->
+                    when (res) {
+                        is Resource.Failure -> produce(CreateOrderAction.ShowFailureMsg(res.message.toString()))
+                        is Resource.Progress -> produce(CreateOrderAction.ShowLoading(res.loading))
+                        is Resource.Success -> {
+                            produce(CreateOrderAction.AddressDefault(res.data?.message   as String, item))
                         }
                     }
                 }

@@ -32,11 +32,11 @@ class BasketAdapter(
 
         var currentItem = ordersList[position]
         holder.binding.tvTitle.setText(currentItem.name)
-        holder.binding.tvService.setText("("+currentItem.service_name+")")
-        holder.binding.tvPrice.setText(currentItem.price +" "+ context.getText(R.string.sr))
+        holder.binding.tvService.setText("(" + currentItem.service_name + ")")
+        holder.binding.tvPrice.setText(currentItem.price + " " + context.getText(R.string.sr))
 
         holder.binding.ivCancel.setOnClickListener {
-       listener.     onItemsRemoveLisener(currentItem, position)
+            listener.onItemsRemoveLisener(currentItem, position)
             //removeItem(position)
         }
         holder.binding.tvNumAddItional.setText(currentItem.count.toString())
@@ -68,13 +68,16 @@ class BasketAdapter(
         }
     }
 
-      fun removeItem(position: Int) {
+    fun removeItem(position: Int) {
 
+        try {
+            ordersList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, ordersList.size)
+            notifyDataSetChanged()
+        } catch (e: Exception) {
 
-        ordersList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, ordersList.size)
-        notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int = ordersList.size

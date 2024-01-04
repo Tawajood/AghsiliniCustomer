@@ -15,8 +15,8 @@ import com.dotjoo.aghsilinicustomer.ui.activity.AuthActivity
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
 import com.dotjoo.aghsilinicustomer.ui.dialog.CheckOtpSheetFragment
 import com.dotjoo.aghsilinicustomer.ui.dialog.OnPhoneCheckedWithOtp
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthAction
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthViewModel
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthAction
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthViewModel
 import com.dotjoo.aghsilinicustomer.util.PermissionManager
 import com.dotjoo.aghsilinicustomer.util.WWLocationManager
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
@@ -27,8 +27,7 @@ import com.dotjoo.aghsilinicustomer.util.openLocationSettingsResultLauncher
 import com.dotjoo.aghsilinicustomer.util.requestAppPermissions
 import com.hbb20.CountryCodePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_register.view.tv_skip
-import kotlinx.android.synthetic.main.toolbar.view.iv_back
+ import kotlinx.android.synthetic.main.toolbar.view.iv_back
 import kotlinx.android.synthetic.main.toolbar.view.tv_title
 import javax.inject.Inject
 
@@ -96,14 +95,15 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(),
             is AuthAction.ShowRegisterVaildation -> {
                 showProgress(false)
                 if (verified_phone.isNullOrEmpty() || verified_phone == null) {
-                    CheckOtpSheetFragment.newInstance(countryCode,
-                        binding.etPhone.text.toString(),
+                    CheckOtpSheetFragment.newInstance(action.data.country_code,
+                        action.data.phone,
                         object : OnPhoneCheckedWithOtp {
                             override fun onClick(
                                 country_code: String, phone: String, verifed: Boolean
                             ) {
                                 verified_phone = phone
                                 verified_countryCode = country_code
+                                mViewModel.register(action.data)
                             }
                         }).show(
                         childFragmentManager, "CheckOtpSheetFragment"
@@ -113,14 +113,15 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(),
                     if (verified_phone == action.data.phone && verified_countryCode == action.data.country_code) {
                         mViewModel.register(action.data)
                     } else{
-                        CheckOtpSheetFragment.newInstance(countryCode,
-                            binding.etPhone.text.toString(),
+                        CheckOtpSheetFragment.newInstance(action.data.country_code,
+                            action.data.phone,
                             object : OnPhoneCheckedWithOtp {
                                 override fun onClick(
                                     country_code: String, phone: String, verifed: Boolean
                                 ) {
                                     verified_phone = phone
                                     verified_countryCode = country_code
+                                    mViewModel.register(action.data)
                                 }
                             }).show(
                             childFragmentManager, "CheckOtpSheetFragment"
@@ -135,6 +136,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(),
             is AuthAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     showToast(it.substring(3, it.length))
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                 }

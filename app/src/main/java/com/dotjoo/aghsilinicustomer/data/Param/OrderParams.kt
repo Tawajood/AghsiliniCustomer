@@ -19,6 +19,8 @@ data class IncreaseItemParam(val item_id :String="", val plus :Boolean )
 data class RemoveItemParam(val item_id :String=""  )
 data class GetItemsInServiceParam(val laundry_id :String="", val service_id :String="" )
 data class AddAddressParam(val lat :String="", val lng :String="" , val address :String="" )
+data class ChangeCurrentAddressParam(val  id :String=""  )
+
 data class AddToCartParam(@SerializedName("laundry_id" ) var laundry_id   : String?     = null,
                           @SerializedName("urgent" ) var argent       : Boolean?     = null, @SerializedName("items" ) var items : ArrayList<Items> = arrayListOf()
 )

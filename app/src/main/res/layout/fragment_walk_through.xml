@@ -47,8 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:layoutDirection="rtl"
-            app:layout_constraintBottom_toTopOf="@id/ll_btns"
+             app:layout_constraintBottom_toTopOf="@id/ll_btns"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo"
             tools:background="@color/white" />
@@ -129,9 +128,9 @@
                         android:id="@+id/iv_next"
                         android:layout_width="@dimen/_28sdp"
                         android:layout_height="@dimen/_28sdp"
-                        android:src="@drawable/arrow_left"
+                        android:src="@drawable/left_arrow_svgrepo_com"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+         android:rotation="180"               app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />

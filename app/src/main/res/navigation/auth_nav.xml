@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.aplash.SplashFragment"
+        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.splash.SplashFragment"
         android:label="SplashFragment" />
     <fragment
         android:id="@+id/walkThroughFragment"
@@ -16,7 +16,7 @@
         tools:layout="@layout/fragment_walk_through" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.LoginFragment"
+        android:name="com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment

@@ -2,13 +2,9 @@ package com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password
 
 import android.content.Intent
 import android.graphics.Paint
-import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,15 +13,27 @@ import com.dotjoo.aghsilinicustomer.base.BaseFragment
 import com.dotjoo.aghsilinicustomer.data.PrefsHelper
 import com.dotjoo.aghsilinicustomer.databinding.FragmentForgetPasswordBinding
 import com.dotjoo.aghsilinicustomer.ui.activity.AuthActivity
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthAction
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthViewModel
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthAction
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthViewModel
 import com.dotjoo.aghsilinicustomer.util.Constants
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
 import com.dotjoo.aghsilinicustomer.util.observe
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthSettings
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.PhoneMultiFactorGenerator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hbb20.CountryCodePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.toolbar.view.card_back
 import kotlinx.android.synthetic.main.toolbar.view.tv_title
+import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
@@ -34,6 +42,13 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
 
     private val mViewModel: AuthViewModel by viewModels()
     var countryCode = "+966"
+    lateinit var phoneAuthProvider:PhoneAuthProvider.ForceResendingToken
+    var verifiedOtp =""
+    var otp =""
+    private var auth: FirebaseAuth = Firebase.auth
+  //  private var userAccount: String? = null
+ //   var firebaseAuthSettings: FirebaseAuthSettings = auth.getFirebaseAuthSettings()
+    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     override fun onFragmentReady() {
         state1()
         onClick()
@@ -56,16 +71,11 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
             is AuthAction.PhoneChecked -> {
                 showProgress(false)
                 showToast(action.message)
+                sendVerfaction(countryCode+mViewModel.phone)
                 state2()
 
             }
 
-            is AuthAction.OtpChecked -> {
-                showToast(action.message)
-                showProgress(false)
-                state3()
-
-            }
 
             is AuthAction.ResetPasswordSucess -> {
                 showToast(action.message)
@@ -81,7 +91,10 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
             is AuthAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     showToast(it.substring(3, it.length))
-                } else {
+                }
+                else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
+                }else {
                     showToast(action.message)
                 }
                 showProgress(false)
@@ -93,9 +106,7 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
             }
         }
     }
-
-
-    private fun onClick() {
+   private fun onClick() {
         binding.countryCodePicker.setOnCountryChangeListener(this)
         binding.tvResend.setPaintFlags(binding.tvResend.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
         binding.btnEnterNumber.setOnClickListener {
@@ -103,8 +114,7 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
                     .isNullOrEmpty()
             ) showToast(resources.getString(R.string.msg_empty_phone_number))
             else {
-                mViewModel.email = binding.etPhone.text.toString()
-                mViewModel.checkPhone(countryCode, mViewModel.email.toString())
+                 mViewModel.checkPhone(countryCode,binding.etPhone.text.toString())
             }
         }
 
@@ -113,10 +123,13 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
                     .isNullOrEmpty()
             ) showToast(resources.getString(R.string.msg_empty_otp))
             else {
-                mViewModel.otp = binding.etOtp.otp.toString()
-                mViewModel.checkOtp(
-                    countryCode, mViewModel.email.toString(), mViewModel.otp.toString()
-                )
+                otp= binding.etOtp.otp.toString()
+              //  firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber("+20 01022265141", binding.etOtp.otp);
+                verfyOtp()
+         //       mViewModel.otp = binding.etOtp.otp.toString()
+            //    mViewModel.checkOtp(
+          //          countryCode, mViewModel.email.toString(), mViewModel.otp.toString()
+          //      )
             }
         }
 
@@ -137,20 +150,83 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>(),
                 state2()
             }
         }
+        binding.tvResend.setOnClickListener {
+            sendVerfaction(countryCode+mViewModel.phone)
+            state2()
+        }
         onBack()
     }
 
+    private fun sendVerfaction(phoneNumber:String) {
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                showToast("com")
+                //     binsding?.btnGetOtp?.visibility = View.VISIBLE
+            }
+
+            override fun onVerificationFailed(p0: FirebaseException) {
+                //     binding?.btnGetOtp?.visibility = View.VISIBLE
+                showToast(p0.message)
+            }
+
+            override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                super.onCodeSent(p0, p1)
+                showToast(p0)
+                verifiedOtp=p0
+                phoneAuthProvider=p1    //   fragmentInputOtpBinding?.btnGetOtp?.visibility = View.VISIBLE
+                //     moveToVerifyOtp(p0)
+            }
+        }
+
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber) // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(requireActivity()) // Activity (for callback binding)
+            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)    }
+
+    private fun verfyOtp() {
+ var credential=PhoneAuthProvider.getCredential(verifiedOtp, otp)
+    signin(credential)
+        val multiFactorAssertion
+                = PhoneMultiFactorGenerator.getAssertion(credential)
+
+    }
+
+    private fun signin(credential: PhoneAuthCredential) {
+auth.signInWithCredential(credential).addOnCompleteListener(OnCompleteListener {
+    if (it.isSuccessful) {
+        if (it.isSuccessful) {
+            Log.i("cccccccccccc","sucess")
+            state3()
+        }else{
+            showToast(resources.getString(R.string.wrongotp))
+            Log.i("cccccccccccccccc","false")
+
+        }
+    }
+
+    })
+
+}
     private fun onBack() {
         activity?.let {
             requireActivity().onBackPressedDispatcher.addCallback(
                 it,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
-
-                        if (isEnabled) {
-                            isEnabled = false
-                            findNavController().navigateUp()
+                        if (state == 1) {
+                            if (isEnabled) {
+                                isEnabled = false
+                                findNavController().navigateUp()
+                            }
+                        } else if (state == 2) {
+                            state1()
+                        } else {
+                            state2()
                         }
+
                     }
                 })
         }

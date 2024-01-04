@@ -72,6 +72,8 @@ class AddBalanceSheetFragment(var onClick: OnClickLoginFirst) : BottomSheetDialo
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(requireContext(),resources.getString(R.string.connection_error))
                 } else {
                     showToast(requireContext(), action.message)
                     showProgress(false)

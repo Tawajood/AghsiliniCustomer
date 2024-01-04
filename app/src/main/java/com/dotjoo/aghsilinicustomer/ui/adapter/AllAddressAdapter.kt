@@ -40,7 +40,7 @@ class AllAddressAdapter(
             context?.resources?.getColor(R.color.black)
                 ?.let { holder.binding.tvAddress.setTextColor(it) }
         } else {
-            context?.resources?.getColor(R.color.grey_dark)
+            context?.resources?.getColor(R.color.grey)
                 ?.let { holder.binding.tvAddress.setTextColor(it) }
 
         }
@@ -48,7 +48,7 @@ class AllAddressAdapter(
             lisener.onRemoveAddressClickLisener(currentItem, position)
         }
   holder.binding.root.setOnClickListener {
-lisener.onDefaultAddressClickLisener(currentItem)
+lisener.onDefaultAddressClickLisener(currentItem, position)
   }
 
     }

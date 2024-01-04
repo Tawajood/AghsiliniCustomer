@@ -40,6 +40,6 @@ interface ItemsInLaundryClickListener {
 
 interface OnAllAddressClickLisener {
     fun onRemoveAddressClickLisener(item: Address, position: Int)
-    fun onDefaultAddressClickLisener(item: Address)
+    fun onDefaultAddressClickLisener(item: Address, position: Int)
 
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
@@ -27,6 +28,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
  import com.dotjoo.aghsilinicustomer.R
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 fun RecyclerView.disableItemChangedAnimation(disable: Boolean = true) {
@@ -57,7 +61,26 @@ fun getColorFromString(color: String?): Int {
 
 fun TextView.setTextSizeFromToPx(@DimenRes res: Int) =
     setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(res))
-
+fun toLocalDate(time:String? ):String? {
+    try {
+         val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val dateObj: Date = sdf.parse(time)
+           return(   SimpleDateFormat("dd-MM-yyyy").format(dateObj))
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return null
+    }
+}
+fun toTwelevePattern(time:String? ):String? {
+    try {
+        val sdf = SimpleDateFormat("HH:mm")
+        val dateObj: Date = sdf.parse(time)
+          return( SimpleDateFormat("hh:mm a").format(dateObj))
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return null
+    }
+}
 fun View.show(show: Boolean = true) {
     if (show) visible() else gone()
 }

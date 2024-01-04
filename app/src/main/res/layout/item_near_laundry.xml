@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_6sdp"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:layoutDirection="rtl"
+
         app:cardCornerRadius="@dimen/_8sdp"
         app:strokeColor="@color/light_grey"
         app:strokeWidth="@dimen/_1sdp">
@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="5 كم"
-                android:textColor="@color/black"
+                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,8 +41,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:drawableEnd="@drawable/ic_star_sel"
                 android:drawablePadding="@dimen/_5sdp"
-                android:text="4.9"
-                android:textColor="@color/black"
+                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -75,8 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="كلين هاوس"
-                android:textAlignment="viewStart"
+                 android:textAlignment="viewStart"
                 android:textColor="@color/grey_dark"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
@@ -93,8 +90,7 @@
                 android:drawablePadding="@dimen/_4sdp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="الرياض، السعودي.."
-                android:textAlignment="viewStart"
+                 android:textAlignment="viewStart"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/_11sdp"
                 android:textStyle="bold"

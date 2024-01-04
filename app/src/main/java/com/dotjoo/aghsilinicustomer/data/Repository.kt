@@ -3,6 +3,7 @@ package com.dotjoo.aghsilinicustomer.data
 import com.dotjoo.aghsilinicustomer.base.AllLaundriesParams
 import com.dotjoo.aghsilinicustomer.data.Param.AddAddressParam
 import com.dotjoo.aghsilinicustomer.data.Param.AddToCartParam
+import com.dotjoo.aghsilinicustomer.data.Param.ChangeCurrentAddressParam
 import com.dotjoo.aghsilinicustomer.data.Param.ChangePasswordParams
 import com.dotjoo.aghsilinicustomer.data.Param.ChargeWalletParam
 import com.dotjoo.aghsilinicustomer.data.Param.CheckOtpWithPhoneParam
@@ -21,8 +22,17 @@ import com.dotjoo.aghsilinicustomer.data.Param.ResetPasswordParams
 import com.dotjoo.aghsilinicustomer.data.Param.ReviewParam
 import com.dotjoo.aghsilinicustomer.data.Param.SendMessageParam
 import com.dotjoo.aghsilinicustomer.data.Param.UpdateFcmTokenParam
+import com.dotjoo.aghsilinicustomer.data.Param.UpdatePhoneParam
 import com.dotjoo.aghsilinicustomer.data.Param.UpdateProfileParam
+import com.dotjoo.aghsilinicustomer.data.Param.toMap
 import com.dotjoo.aghsilinicustomer.data.webService.ApiInterface
+import com.dotjoo.aghsilinicustomer.util.FileManager.toMultiPart
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.PartMap
 import javax.inject.Inject
 
 
@@ -66,6 +76,7 @@ suspend fun searchAllLaundries(page: Int , name:String ) =
     suspend fun getAllAddresses() = api.getAllAddresses()
     suspend fun createOrder( param: CreateOrderParam  ) = api.createOrder(param)
     suspend fun addAddress( param: AddAddressParam  ) = api.addAddress(param.lat,param.lng,param.address)
+    suspend fun changeCurrentAddress( param: ChangeCurrentAddressParam) = api.changeCurrentAddress(param.id)
     suspend fun getCurrentOrder() = api.getCurrentOrder()
     suspend fun getPrevOrder() = api.getPrevOrder()
     suspend fun getNewOrder() = api.getNewOrder()
@@ -94,7 +105,10 @@ suspend fun searchAllLaundries(page: Int , name:String ) =
     suspend fun deleteAddress(param: DeleteAddressParam) = api.deleteAddress(param.id)
     suspend fun getProfile( ) = api.getProfile( )
     suspend fun updatlang( ) = api.updatlang( )
-    suspend fun updateProfile(param: UpdateProfileParam) = api.updateProfile(  param.name,
+    suspend fun updateProfile(param: UpdateProfileParam) = api.updateProfile( param.toMap(),
+        param.img?.toMultiPart("img"),
+    )
+    suspend fun changrPhone(param: UpdatePhoneParam) = api.changrPhone(
         param.country_code,
         param.phone,)
 

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:paddingTop="@dimen/_30sdp"
+            android:paddingTop="@dimen/_40sdp"
             tools:context=".ui.fragment.order.OrderFragment">
 
             <androidx.cardview.widget.CardView
@@ -165,7 +165,26 @@
                                     app:layout_constraintBottom_toBottomOf="@+id/tv_subtotal"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/tv_subtotal" />
+                                <TextView
+                                    android:id="@+id/tv_items_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_4sdp"
+                                    android:text="@string/items_count"
+                                    android:textColor="@color/grey"
+                                    android:textSize="@dimen/_12sdp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tv_subtotal" />
 
+                                <TextView
+                                    android:id="@+id/tv_items_count_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/grey_dark"
+                                    android:textSize="@dimen/_10sdp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tv_items_count"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/tv_items_count" />
                                 <TextView
                                     android:id="@+id/tv_delivery_fees"
                                     android:layout_width="wrap_content"
@@ -175,7 +194,7 @@
                                     android:textColor="@color/grey"
                                     android:textSize="@dimen/_12sdp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tv_subtotal" />
+                                    app:layout_constraintTop_toBottomOf="@+id/tv_items_count" />
 
                                 <TextView
                                     android:id="@+id/tv_delivery_fees_value"
@@ -258,8 +277,8 @@
                             android:layout_marginHorizontal="@dimen/_15sdp"
                             android:layout_marginVertical="@dimen/_20sdp"
                             android:backgroundTint="@color/blue"
-                            android:gravity="center"
-                            android:text="@string/continuee"
+                            android:textAllCaps="false"             android:gravity="center"
+                            android:text="@string/compelete_order"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_13sdp"
                             android:textStyle="bold"
@@ -318,7 +337,7 @@
                             android:layout_marginVertical="@dimen/_20sdp"
                             android:backgroundTint="@color/blue"
                             android:drawableEnd="@drawable/ic_add_white"
-                            android:gravity="start|center_vertical"
+                        android:textAllCaps="false"    android:gravity="start|center_vertical"
                             android:text="@string/make_order_now"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"

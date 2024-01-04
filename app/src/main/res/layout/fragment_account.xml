@@ -210,8 +210,9 @@
                         <ImageView
                             android:layout_width="@dimen/_15sdp"
                             android:layout_height="@dimen/_20sdp"
-                            android:rotation="90"
-                            android:src="@drawable/ic_arrow_down"
+                            android:rotation="180"
+
+                            android:src="@drawable/ic_arrow_left_"
                             app:layout_constraintBottom_toBottomOf="@id/tv_change_pass"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@id/tv_change_pass" />
@@ -268,8 +269,8 @@
                         <ImageView
                             android:layout_width="@dimen/_15sdp"
                             android:layout_height="@dimen/_20sdp"
-                            android:rotation="90"
-                            android:src="@drawable/ic_arrow_down"
+                            android:rotation="180"
+                            android:src="@drawable/ic_arrow_left_"
                             app:layout_constraintBottom_toBottomOf="@id/tv_delete"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@id/tv_delete" />

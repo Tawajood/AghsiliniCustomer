@@ -23,6 +23,7 @@ sealed class CreateOrderAction : Action {
 
       data class AddressAdded(var msg: String ) : CreateOrderAction()
       data class AddressDeleted(var msg: String, val item: Address) : CreateOrderAction()
+      data class AddressDefault(var msg: String, val item: Address) : CreateOrderAction()
      data class  ShowCart(val data : CartResponse): CreateOrderAction ()
      data class  AllAddressShown(val data : AllAddressResponse): CreateOrderAction ()
     data   class ShowServices(val data: ServiceResponse) : CreateOrderAction()

@@ -23,7 +23,9 @@ import com.dotjoo.aghsilinicustomer.data.remote.response.ServiceResponse
  import com.dotjoo.aghsilinicustomer.data.remote.response.SliderResponse
  import com.dotjoo.aghsilinicustomer.data.remote.response.TermsResponse
 import com.dotjoo.aghsilinicustomer.data.remote.response.WalletResponse
-import retrofit2.http.*
+ import okhttp3.MultipartBody
+ import okhttp3.RequestBody
+ import retrofit2.http.*
 import javax.inject.Singleton
 
 
@@ -72,6 +74,12 @@ interface ApiInterface {
            @Field("password") password: String,
       @Field("password_confirmation") password_confirmation: String?
     ): NetworkResponse<DevResponse<Any>, ErrorResponse>
+@POST("api/change/phone")
+    @FormUrlEncoded
+    suspend fun changrPhone (
+           @Field("country_code") country_code: String,
+           @Field("phone") phone: String,
+     ): NetworkResponse<DevResponse<Any>, ErrorResponse>
 
     @POST("api/register")
     @FormUrlEncoded
@@ -129,6 +137,11 @@ interface ApiInterface {
         @Field("lon") lon: String,
         @Field("address") address: String?,
     ): NetworkResponse<DevResponse<AllAddressResponse>, ErrorResponse>
+    @FormUrlEncoded
+    @POST("api/change/current/address")
+    suspend fun changeCurrentAddress(
+        @Field("id") id: String,
+    ): NetworkResponse<DevResponse<Any>, ErrorResponse>
 
     @GET("api/get/curent/order")
     suspend fun getCurrentOrder(
@@ -267,11 +280,11 @@ interface ApiInterface {
 
 
  @POST("api/update/profile")
- @FormUrlEncoded
+ @Multipart
+ @JvmSuppressWildcards
  suspend fun updateProfile(
-     @Field("name") name: String,
-     @Field("country_code") country_code: String,
-     @Field("phone") phone: String,): NetworkResponse<DevResponse<Any>, ErrorResponse>
+     @PartMap updateMap: Map<String, RequestBody>,
+     @Part image: MultipartBody.Part?): NetworkResponse<DevResponse<Any>, ErrorResponse>
 
   @GET("api/update/lang")
      suspend fun updatlang(

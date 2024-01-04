@@ -19,7 +19,7 @@ sealed class HomeAction : Action {
      data class ShowLaundryReviews(val data:ReviewsResponse): HomeAction()
      data class ShowSliderHome(val data: SliderResponse): HomeAction()
     data class  ShowNearestLaundries(val data : AllLaundriesResponse): HomeAction()
-    data class  ShowCurrent(val data: Address?): HomeAction()
+    data class  ShowCurrent(val data: ArrayList<Address>?): HomeAction()
 
 
 }

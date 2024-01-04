@@ -9,8 +9,8 @@ import com.dotjoo.aghsilinicustomer.base.BaseFragment
  import com.dotjoo.aghsilinicustomer.databinding.FragmentTermsBinding
 import com.dotjoo.aghsilinicustomer.ui.activity.AuthActivity
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthAction
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthViewModel
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthAction
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthViewModel
 import com.dotjoo.aghsilinicustomer.ui.fragment.main.settingFragments.SettingAction
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
 import com.dotjoo.aghsilinicustomer.util.observe
@@ -48,6 +48,8 @@ class TermsRegisterFragment:BaseFragment<FragmentTermsBinding>() {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                     showProgress(false)

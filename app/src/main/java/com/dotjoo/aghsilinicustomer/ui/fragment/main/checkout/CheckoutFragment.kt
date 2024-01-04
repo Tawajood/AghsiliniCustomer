@@ -87,7 +87,9 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(), OnAddressClick
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
-                } else {
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
+                }else {
                     showToast(action.message)
                     showProgress(false)
                 }
@@ -121,11 +123,12 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(), OnAddressClick
                 tax = action.data.tax
                 delivery = action.data.delivery
                 total = action.data.total
+                binding.cardUrgent.isVisible= action.data.urgent==1
                 urgent = action.data.urgent
-              binding.tvTaxValue.setText(tax +resources.getString(R.string.sr))
-              binding.tvDeliveryFeesValue.setText(delivery +resources.getString(R.string.sr))
-              binding.tvTotalValue.setText(total +resources.getString(R.string.sr))
-              binding.tvSubTotalValue.setText(totalItemsPrice +resources.getString(R.string.sr))
+              binding.tvTaxValue.setText(tax  + " "+resources.getString(R.string.sr))
+              binding.tvDeliveryFeesValue.setText(delivery + " "+resources.getString(R.string.sr))
+              binding.tvTotalValue.setText(total  + " "+resources.getString(R.string.sr))
+              binding.tvSubTotalValue.setText(totalItemsPrice  + " "+resources.getString(R.string.sr))
 
 
                 action.data.laundry?.let {
@@ -135,7 +138,13 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(), OnAddressClick
                     binding.ivlogo.loadImage(it.logo, isCircular = true)
                 }
                 loadItems(action.data.cartitems)
-            }
+                var count =0
+               action. data.cartitems.forEach {
+                    count =count + it.count
+                }
+                binding.tvItemsCountValue.setText(count.toString() + " "+ resources.getText(R.string.items))
+
+        binding.lytData.isVisible= true    }
 
             else -> {
 

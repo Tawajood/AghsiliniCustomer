@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dotjoo.aghsilinicustomer.R
  import com.dotjoo.aghsilinicustomer.base.BaseViewModel
 import com.dotjoo.aghsilinicustomer.data.Param.ChangePasswordParams
+import com.dotjoo.aghsilinicustomer.data.Param.UpdatePhoneParam
 import com.dotjoo.aghsilinicustomer.data.Param.UpdateProfileParam
 import com.dotjoo.aghsilinicustomer.data.remote.response.*
 import com.dotjoo.aghsilinicustomer.domain.AccountUseCase
@@ -90,7 +91,7 @@ class AccountViewModel
         }
     }
  
-    fun updateProfile(param: UpdateProfileParam) {
+    fun updateProfile(param: UpdateProfileParam, upDatePhoneFlag:Int) {
         if (app.let { it1 -> NetworkConnectivity.hasInternetConnection(it1) } == true) {
             produce(AccountAction.ShowLoading(true))
 
@@ -103,6 +104,30 @@ class AccountViewModel
                         is Resource.Progress -> produce(AccountAction.ShowLoading(res.loading))
                         is Resource.Success -> {
                             produce(AccountAction.ShowProfileUpdated(res.data?.message as String))
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            produce(AccountAction.ShowFailureMsg(getString(R.string.no_internet)))
+        }
+    }
+
+
+    fun updatePhone(param: UpdatePhoneParam) {
+        if (app.let { it1 -> NetworkConnectivity.hasInternetConnection(it1) } == true) {
+            produce(AccountAction.ShowLoading(true))
+
+            viewModelScope.launch {
+                var res = useCase.invoke(
+                    viewModelScope, param)
+                { res ->
+                    when (res) {
+                        is Resource.Failure -> produce(AccountAction.ShowFailureMsg(res.message.toString()))
+                        is Resource.Progress -> produce(AccountAction.ShowLoading(res.loading))
+                        is Resource.Success -> {
+                            produce(AccountAction.ShowPhoneUpdated(res.data?.message as String))
                         }
                     }
                 }

@@ -1,27 +1,27 @@
 package com.dotjoo.aghsilinicustomer.ui.adapter
 
- import android.annotation.SuppressLint
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
- import com.dotjoo.aghsilinicustomer.data.remote.response.NotificationItem
- import com.dotjoo.aghsilinicustomer.databinding.ItemNotifactionBinding
+import com.dotjoo.aghsilinicustomer.data.remote.response.NotificationItem
+import com.dotjoo.aghsilinicustomer.databinding.ItemNotifactionBinding
+import com.dotjoo.aghsilinicustomer.util.ext.toLocalDate
+import com.dotjoo.aghsilinicustomer.util.ext.toTwelevePattern
 
 class NotifactionAdapter(
- ) : RecyclerView.Adapter<NotifactionAdapter.NotifactionViewHolder>() {
+) : RecyclerView.Adapter<NotifactionAdapter.NotifactionViewHolder>() {
 
     var _binding: ItemNotifactionBinding? = null
 
     var notifactionsItemsList: ArrayList<NotificationItem> = arrayListOf()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
+        @SuppressLint("NotifyDataSetChanged") set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): NotifactionViewHolder {
         _binding =
             ItemNotifactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,31 +34,32 @@ class NotifactionAdapter(
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, notifactionsItemsList.size)
     }
-    var time= ""
-    var date = ""
+
+    var time: String? = null
+    var date: String? = null
 
     override fun onBindViewHolder(holder: NotifactionViewHolder, position: Int) {
-try {
+        try {
 
 
-    var currentItem = notifactionsItemsList[position]
+            var currentItem = notifactionsItemsList[position]
 
-    holder.binding.tvTitle.text = currentItem.title
+            holder.binding.tvTitle.text = currentItem.title
 
-    date = currentItem.created_at?.split("T")?.get(0).toString()
-     holder.binding.tvDate.text = date
-    holder.binding.tvDesc.text = currentItem.body
-}
-catch (e:Exception){
+            date = toLocalDate(currentItem.created_at?.split("T")?.get(0)) ?: ""
+            time =
+                toTwelevePattern(currentItem.created_at?.split("T")?.get(1)?.substring(0, 5)) ?: ""
+            holder.binding.tvDate.text = time + "   " + date
+            holder.binding.tvDesc.text = currentItem.body
+        } catch (e: Exception) {
 
-}
+        }
     }
 
 
     override fun getItemCount(): Int = notifactionsItemsList.size
 
-    class NotifactionViewHolder(val binding: ItemNotifactionBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class NotifactionViewHolder(val binding: ItemNotifactionBinding) :RecyclerView.ViewHolder(binding.root)
 
 
 }

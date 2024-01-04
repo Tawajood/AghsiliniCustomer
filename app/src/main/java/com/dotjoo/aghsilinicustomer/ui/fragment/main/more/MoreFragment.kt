@@ -16,8 +16,8 @@ import com.dotjoo.aghsilinicustomer.data.PrefsHelper
 import com.dotjoo.aghsilinicustomer.databinding.FragmentMoreBinding
 import com.dotjoo.aghsilinicustomer.ui.activity.AuthActivity
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthAction
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthViewModel
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthAction
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthViewModel
 import com.dotjoo.aghsilinicustomer.util.Constants
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
 import com.dotjoo.aghsilinicustomer.util.ext.showActivity
@@ -43,8 +43,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             binding.v4.isVisible= false
             binding.v8.isVisible= false
             binding.tvNotifaction.isVisible= false
-            binding.v9.isVisible= false
-            binding.tvIt.isVisible= false
+
 
              binding.tvLogout.setText(resources.getText(R.string.login))
         }else{
@@ -77,6 +76,8 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             is AuthAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     showToast(it.substring(3, it.length))
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                 }
@@ -94,7 +95,21 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         binding.tvLogout.setPaintFlags(binding.tvLogout.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
         parent = requireActivity() as MainActivity
         parent.showBottomNav(true)
+        if (PrefsHelper.getLanguage() == Constants.AR) {
+            binding.tvLang.text = "EN"
+        } else {
+            binding.tvLang.text = "العربية"
+        }
 
+        binding.tvLang.setOnClickListener {
+            if (PrefsHelper.getLanguage() == Constants.EN) {
+                PrefsHelper.setLanguage(Constants.AR)
+                showActivity(MainActivity::class.java, clearAllStack = true)
+            } else {
+                PrefsHelper.setLanguage(Constants.EN)
+                showActivity(MainActivity::class.java, clearAllStack = true)
+            }
+        }
             binding.tvWallet.setOnClickListener {
                 findNavController().navigate(R.id.walletFragment)
             }
@@ -104,18 +119,14 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             binding.tvAboutUs.setOnClickListener {
                 findNavController().navigate(R.id.aboutFragment)
             }
-           binding.tvSetting.setOnClickListener {
-           //     findNavController().navigate(R.id.sett)
-            }
+
            binding.tvTerms.setOnClickListener {
                 findNavController().navigate(R.id.termsFragment)
             }
            binding.tvNotifaction.setOnClickListener {
                 findNavController().navigate(R.id.notifactionFragment)
             }
-           binding.tvIt.setOnClickListener {
-                findNavController().navigate(R.id.itFragment)
-            }
+
              binding.cardAddress.setOnClickListener {
                  if(PrefsHelper.getToken().isNullOrEmpty()) {
                      findNavController().navigate(R.id.loginFirstBotomSheetFragment)

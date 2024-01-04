@@ -9,14 +9,16 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_11sdp"     android:backgroundTint="@color/white"    android:layoutDirection="rtl"
-        app:cardCornerRadius="@dimen/_8sdp"
-     app:strokeColor="@color/light_grey"
+        android:layout_marginBottom="@dimen/_11sdp"
+        android:backgroundTint="@color/white"
+         app:cardCornerRadius="@dimen/_8sdp"
+        app:strokeColor="@color/light_grey"
         app:strokeWidth="@dimen/_1sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-       android:backgroundTint="@color/white"     android:layout_height="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
             android:padding="@dimen/_4sdp">
 
 
@@ -26,8 +28,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-            android:textColor="@color/orange"
-            android:textStyle="bold"    android:textSize="@dimen/_12sdp"
+                android:textColor="@color/orange"
+        android:text="جديدخ"        android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                 android:textColor="@color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="#123"        app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -48,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                 android:textColor="@color/grey"
+                android:text="20-3-2323"        android:textColor="@color/grey"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toStartOf="@id/tv_id"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -69,8 +72,8 @@
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginVertical="@dimen/_10sdp"
-                 app:layout_constraintBottom_toBottomOf="@+id/tv_laundry_name"
-
+                app:layout_constraintBottom_toBottomOf="@+id/tv_laundry_name"
+android:src="@drawable/logo_splash"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_laundry_name" />
 
@@ -82,9 +85,9 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/_35sdp"
-                 android:textColor="@color/grey_dark"
+        android:text="mo_lau"        android:textColor="@color/grey_dark"
                 android:textSize="@dimen/_16sdp"
-                android:textStyle="bold"
+     android:textAlignment="viewStart"           android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/tv_urgent"
                 app:layout_constraintStart_toEndOf="@id/iv_logo"
                 app:layout_constraintTop_toBottomOf="@id/v1" />
@@ -92,11 +95,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/tv_urgent"
                 android:layout_width="wrap_content"
-                android:minHeight="@dimen/_30sdp"
-            android:layout_height="wrap_content"    android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_grey"
                 android:minWidth="@dimen/_90sdp"
+                android:minHeight="@dimen/_30sdp"
                 app:cardCornerRadius="@dimen/_14sdp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_laundry_name"
@@ -109,7 +113,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                     android:text="@string/urgent"
+                    android:text="@string/urgent"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/_10sdp"
                     android:textStyle="bold" />

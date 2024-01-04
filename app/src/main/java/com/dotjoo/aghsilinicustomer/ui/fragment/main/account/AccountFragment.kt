@@ -47,7 +47,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>() {
             is AccountAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
-                } else {
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
+                }else {
                     ToastUtils.showToast(requireContext(), action.message)
                     showProgress(false)
                 }

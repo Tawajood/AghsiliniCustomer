@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragment.auth.aplash.SplashFragment">
+        tools:context=".ui.fragment.auth.splash.SplashFragment">
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
    android:id="@+id/guideline"         android:layout_height="@dimen/_1sdp"

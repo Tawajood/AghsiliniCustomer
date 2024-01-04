@@ -19,8 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutDirection="rtl"
-            tools:context=".ui.fragment.order.OrderFragment">
+             tools:context=".ui.fragment.order.OrderFragment">
 
             <RelativeLayout
                 android:id="@+id/lyt_header_blue"
@@ -72,7 +71,7 @@
                         android:layout_marginStart="@dimen/_7sdp"
                         android:layout_toEndOf="@id/ic_arrow"
                         android:drawableEnd="@drawable/ic_hi"
-                        android:text=" يا هلا فيك ! "
+                        android:text="@string/welcome"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_13sdp"
                         android:textStyle="bold"
@@ -131,8 +130,7 @@
                             android:layout_height="@dimen/_40sdp"
                             android:layout_marginStart="@dimen/_15sdp"
                             android:padding="@dimen/_12sdp"
-                            android:rotation="90"
-                            android:src="@drawable/ic_arrow_down"
+                             android:src="@drawable/ic_arrow_left_"
                             app:layout_constraintBottom_toBottomOf="@+id/tv_deliver_addres"
                             app:layout_constraintStart_toEndOf="@id/tv_deliver_addres"
                             app:layout_constraintTop_toTopOf="@id/tv_deliver_addres" />
@@ -291,7 +289,7 @@
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/v8" />
-
+<!--
             <View
                 android:id="@+id/v9"
                 android:layout_width="match_parent"
@@ -313,7 +311,7 @@
                 android:textColor="@color/grey_dark"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/v9" />
+                app:layout_constraintTop_toBottomOf="@id/v9" />-->
 
 
             <TextView
@@ -329,7 +327,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_it" />
+                app:layout_constraintTop_toBottomOf="@id/tv_contactus" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

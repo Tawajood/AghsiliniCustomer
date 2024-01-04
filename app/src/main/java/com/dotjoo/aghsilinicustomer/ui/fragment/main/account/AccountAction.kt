@@ -10,6 +10,7 @@ sealed class AccountAction : Action {
     data class ShowFailureMsg(val message: String?) : AccountAction()
     data class LangUpdated(val message: String?) : AccountAction()
     data class ShowProfileUpdated(val message: String?) : AccountAction()
+    data class ShowPhoneUpdated(val message: String?) : AccountAction()
     data class PasswordChanged(val message: String?) : AccountAction()
     data class ShowProfileDeleted(val message: String?) : AccountAction()
 

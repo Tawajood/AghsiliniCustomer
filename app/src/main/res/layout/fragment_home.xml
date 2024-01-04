@@ -34,18 +34,25 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/home_header"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                     android:layout_width="@dimen/_60sdp"
+                     android:layout_height="@dimen/_60sdp"
+             android:layout_marginTop="@dimen/_20sdp"        android:src="@drawable/logo_white"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
                 <TextView
                     android:id="@+id/tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_50sdp"
                     android:layout_marginTop="@dimen/_24sdp"
-                    android:layout_marginEnd="@dimen/_50sdp"
                     android:drawableEnd="@drawable/ic_arrow_down"
                     android:text="@string/delivery"
                     android:textColor="@color/blue"
                     app:layout_constraintBottom_toBottomOf="@id/iv_header"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_header" />
 
                 <TextView
@@ -60,158 +67,190 @@
                     app:layout_constraintTop_toBottomOf="@id/tv1" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lyt_nearest_laundry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
+ android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_address">
 
-                    app:layout_constraintTop_toBottomOf="@id/tv_address"
-                    tools:context=".ui.fragment.main.home.HomeFragment">
-
-                    <TextView
-                        android:id="@+id/tv_nearest_laundry"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <EditText
+                        android:id="@+id/et_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
                         android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/nearest_laundries"
-                        android:textColor="@color/grey_dark"
-                        android:textSize="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:background="@drawable/bg_rounded_bordergrey"
+                        android:drawableStart="@drawable/iv_search"
+                        android:drawablePadding="@dimen/_3sdp"
+                        android:hint="@string/search_by_laundry"
+                        android:inputType="text"
+                        android:paddingStart="@dimen/_20sdp"
+                        android:paddingEnd="@dimen/_40sdp"
+                        android:textColor="@color/grey_800"
+                        android:textColorHint="@color/light_grey1"
+                        android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_sub_title"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lyt_nearest_laundry"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:text="اختار من بين العديد من المغسلات و حدد طلبك"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_nearest_laundry" />
 
-                    <TextView
-                        android:id="@+id/tv_all_near"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_16sdp"
-                        android:text="@string/all"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_nearest_laundry" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toBottomOf="@id/et_search"
+                        tools:context=".ui.fragment.main.home.HomeFragment">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_laundies"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginVertical="@dimen/_15sdp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lyt_nearest_laundry"
-                    tools:listitem="@layout/item_near_laundry" />
+                        <TextView
+                            android:id="@+id/tv_nearest_laundry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="@string/nearest_laundries"
+                            android:textColor="@color/grey_dark"
+                            android:textSize="@dimen/_16sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_130sdp"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layoutDirection="inherit"
-                    app:cardCornerRadius="@dimen/_8sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_laundies" />
+                        <TextView
+                            android:id="@+id/tv_sub_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:text="@string/choose_from_laundries"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_nearest_laundry" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lyt_top_ratedlaundry"
-                    android:layout_width="match_parent"
-             android:visibility="gone"       android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_28sdp"
-                    android:background="@color/light_grey"
-                    app:layout_constraintTop_toBottomOf="@id/viewpager"
-                    tools:context=".ui.fragment.main.home.HomeFragment">
-
-
-                    <TextView
-                        android:id="@+id/tvtop_laundry"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/top_rated_laundry"
-                        android:textColor="@color/grey_dark"
-                        android:textSize="@dimen/_14sdp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_sub_titletop_rated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:text="اختار من بين العديد من المغسلات و حدد طلبك"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvtop_laundry" />
-
-                    <TextView
-                        android:id="@+id/tv_all_laundries"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_16sdp"
-                        android:text="@string/all"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvtop_laundry" />
+                        <TextView
+                            android:id="@+id/tv_all_near"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_16sdp"
+                            android:text="@string/all"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_nearest_laundry" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_toplaundies"
+                        android:id="@+id/rv_laundies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:layout_marginVertical="@dimen/_10sdp"
-                        android:orientation="vertical"
+                        android:layout_marginVertical="@dimen/_15sdp"
+                        android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_all_laundries"
+                        app:layout_constraintTop_toBottomOf="@+id/lyt_nearest_laundry"
                         tools:itemCount="5"
                         tools:listitem="@layout/item_near_laundry" />
 
-                    <com.github.ybq.android.spinkit.SpinKitView
-                        android:id="@+id/pre_prog"
-                        style="@style/SpinKitView.Wave"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:SpinKit_Color="@color/blue"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_130sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layoutDirection="inherit"
+                        app:cardCornerRadius="@dimen/_8sdp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/rv_laundies" />
 
-                    <com.github.ybq.android.spinkit.SpinKitView
-                        android:id="@+id/append_progress"
-                        style="@style/SpinKitView.Wave"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lyt_top_ratedlaundry"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:SpinKit_Color="@color/blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:layout_marginTop="@dimen/_28sdp"
+                        android:background="@color/light_grey"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/viewpager"
+                        tools:context=".ui.fragment.main.home.HomeFragment">
+
+
+                        <TextView
+                            android:id="@+id/tvtop_laundry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="@string/top_rated_laundry"
+                            android:textColor="@color/grey_dark"
+                            android:textSize="@dimen/_16sdp"
+                           android:textStyle="bold" app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_sub_titletop_rated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+android:text="@string/choose_from_laundries"                            android:textColor="@color/grey"
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvtop_laundry" />
+
+                        <TextView
+                            android:id="@+id/tv_all_laundries"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_16sdp"
+                            android:text="@string/all"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvtop_laundry" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_toplaundies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:layout_marginVertical="@dimen/_10sdp"
+                            android:orientation="vertical"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_all_laundries"
+                            tools:itemCount="5"
+                            tools:listitem="@layout/item_near_laundry" />
+
+                        <com.github.ybq.android.spinkit.SpinKitView
+                            android:id="@+id/pre_prog"
+                            style="@style/SpinKitView.Wave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:SpinKit_Color="@color/blue"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.github.ybq.android.spinkit.SpinKitView
+                            android:id="@+id/append_progress"
+                            style="@style/SpinKitView.Wave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:SpinKit_Color="@color/blue"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </com.dotjoo.aghsilinicustomer.base.OnlyVerticalSwipeRefreshLayout>

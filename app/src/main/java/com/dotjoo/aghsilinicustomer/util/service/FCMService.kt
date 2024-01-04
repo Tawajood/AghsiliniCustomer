@@ -4,18 +4,21 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
- import android.graphics.Color
+import android.content.Intent
+import android.graphics.Color
 import android.media.AudioAttributes
  import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDeepLinkBuilder
 import com.dotjoo.aghsilinicustomer.R
 import com.dotjoo.aghsilinicustomer.data.PrefsHelper
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
+import com.dotjoo.aghsilinicustomer.util.Constants
 import com.dotjoo.aghsilinicustomer.util.Constants.CHANNEL_ID
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -78,13 +81,35 @@ class FCMService : FirebaseMessagingService() {
     ) {
         Log.d(TAG, "showNotification: $remoteMessage")
 
-        var bundel = Bundle()
+         val orderId = remoteMessage["order_id"]
+         val status = remoteMessage["status"]
 
-        val contentIntent: () -> PendingIntent ={
+        val contentIntent: PendingIntent? = (if (status != null) {
+
+            if (status == "2") {
+
+                orderId?.let { sendRealTimeBroadcast(it) }
+                NavDeepLinkBuilder(applicationContext).setComponentName(MainActivity::class.java)
+                    .setGraph(R.navigation.main_nav).setDestination(R.id.orderInfoFragment)
+                    .setArguments(    bundleOf(
+                         Constants.ORDER_ID to orderId,
+                     )
+                    )
+                    .createPendingIntent()
+
+            } else {
+                NavDeepLinkBuilder(applicationContext).setComponentName(MainActivity::class.java)
+                    .setGraph(R.navigation.main_nav).setDestination(R.id.homeFragment)
+                    .createPendingIntent() }
+
+        } else {
+          //  val intent = Intent(this, MainActivity::class.java)
+           // PendingIntent.getActivity(this, 100, intent, PendingIntent.FLAG_IMMUTABLE)
             NavDeepLinkBuilder(applicationContext).setComponentName(MainActivity::class.java)
                 .setGraph(R.navigation.main_nav).setDestination(R.id.homeFragment)
-                 .createPendingIntent()
-        }
+                .createPendingIntent()
+        })
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -100,7 +125,7 @@ class FCMService : FirebaseMessagingService() {
 
             val notification = NotificationCompat.Builder(this, CHANNEL_ID).setAutoCancel(true)
                 .setSmallIcon(R.drawable.logo_more_screen).setContentTitle(notification?.title)
-                .setContentText(notification?.body).setContentIntent(it.invoke())
+                .setContentText(notification?.body).setContentIntent(it )
                 // .setSound(soundUri)
                 .setVibrate(pattern)
 
@@ -112,6 +137,13 @@ class FCMService : FirebaseMessagingService() {
 
 
 
+    private fun sendRealTimeBroadcast(orderId:String ) {
+        val intent =
+            Intent(MainActivity.MAIN_SCREEN_ACTION) //used to receive in intent filter when register the broadcast
+        intent.putExtra(Constants.Notifaction, orderId)
+        sendBroadcast(intent)
+
+    }
 @RequiresApi(Build.VERSION_CODES.O)
 private fun createNotificationChannel(notificationManager: NotificationManager) {
 

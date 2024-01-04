@@ -1,7 +1,6 @@
 package com.dotjoo.aghsilinicustomer.ui.activity
 
-import android.content.Intent
- import android.os.Bundle
+  import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.dotjoo.aghsilinicustomer.R
@@ -35,6 +34,9 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>() {
 
                 } else if (value == Constants.SIGNUP) {
                     graph.setStartDestination(R.id.registerFragment)
+                }
+                else if (value == Constants.WALK_THROUGHT) {
+                    graph.setStartDestination(R.id.walkThroughFragment)
                 }
                 else {
                     graph.setStartDestination(R.id.splashFragment)

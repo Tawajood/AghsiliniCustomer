@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.dotjoo.aghsilinicustomer.R
 import com.dotjoo.aghsilinicustomer.base.BaseFragment
+import com.dotjoo.aghsilinicustomer.data.PrefsHelper
 import com.dotjoo.aghsilinicustomer.databinding.FragmentContactUsBinding
  import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
@@ -45,7 +46,9 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
-                } else {
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
+                }else {
                     showToast(action.message)
                     showProgress(false)
                 }
@@ -66,6 +69,14 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
     lateinit var parent: MainActivity
     private fun onClick() {
+        if(PrefsHelper.getToken().isNullOrEmpty()){
+
+            binding.lytIt.isVisible= false
+
+         }else{
+
+        }
+
         parent = requireActivity() as MainActivity
         parent.showBottomNav(false)
         binding.toolbar.tv_title.setText(resources.getText(R.string.contact_us))

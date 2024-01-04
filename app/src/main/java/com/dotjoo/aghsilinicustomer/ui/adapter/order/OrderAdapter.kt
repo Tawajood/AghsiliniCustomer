@@ -46,7 +46,7 @@ class OrderAdapter(
         holder.binding.tvDate.setText("#${currentItem.created_at}")
         holder.binding.tvLaundryName.setText(currentItem.laundry)
         holder.binding.ivLogo.loadImage(currentItem.logo, isCircular = true)
-        holder.binding.tvUrgent.isVisible=(currentItem.argent==1)
+        holder.binding.tvUrgent.isVisible=(currentItem.argent == 1)
         holder.binding.root.setOnClickListener {
             listener.onItemsClickLisener(currentItem)
         }

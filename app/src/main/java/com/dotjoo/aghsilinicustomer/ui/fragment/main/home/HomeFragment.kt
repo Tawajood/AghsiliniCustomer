@@ -3,8 +3,12 @@ package com.dotjoo.aghsilinicustomer.ui.fragment.main.home
 import android.graphics.Paint
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -18,14 +22,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.dotjoo.aghsilinicustomer.R
 import com.dotjoo.aghsilinicustomer.base.BaseFragment
 import com.dotjoo.aghsilinicustomer.data.PrefsHelper
+import com.dotjoo.aghsilinicustomer.data.remote.response.Address
 import com.dotjoo.aghsilinicustomer.data.remote.response.Laundry
 import com.dotjoo.aghsilinicustomer.data.remote.response.SliderHome
 import com.dotjoo.aghsilinicustomer.databinding.FragmentHomeBinding
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
+import com.dotjoo.aghsilinicustomer.ui.adapter.SectionsHomePagerAdapter
 import com.dotjoo.aghsilinicustomer.ui.adapter.home.AllLaundriesPagingAdapter
 import com.dotjoo.aghsilinicustomer.ui.adapter.home.Cardsize.DevisionCard
 import com.dotjoo.aghsilinicustomer.ui.adapter.home.NearLaundriesAdapter
-import com.dotjoo.aghsilinicustomer.ui.adapter.SectionsHomePagerAdapter
 import com.dotjoo.aghsilinicustomer.ui.lisener.LaundryClickListener
 import com.dotjoo.aghsilinicustomer.util.Constants
 import com.dotjoo.aghsilinicustomer.util.PermissionManager
@@ -87,7 +92,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), LaundryClickListener {
     }
 
     private fun setAddress() {
-        if (parent.lat == null) {
+     //   if (parent.lat == null) {
             if (PrefsHelper.getUserData().isNull() || PrefsHelper.getUserData() == null) {
                 checkLocation()
             } else {
@@ -95,12 +100,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), LaundryClickListener {
                 mViewModel.getAllAddresses()
             }
 
-        } else {
+     /*   } else {
 
             mViewModel.getAllLaundries(parent.lat.toString(), parent.long.toString())
             mViewModel.getNearestLaundries(parent.lat.toString(), parent.long.toString())
             binding.tvAddress.setText(parent.address)
-        }
+        }*/
     }
 
     fun handleViewState(action: HomeAction) {
@@ -117,6 +122,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), LaundryClickListener {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                     showProgress(false)
@@ -130,13 +137,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), LaundryClickListener {
             }
 
             is HomeAction.ShowCurrent -> {
-                if(action.data ==null){
+                if(action.data ==null ||action.data.isNullOrEmpty()){
                     checkLocation ()
                 }else {
-                    action.data?.let {
-                        parent.lat = it.lat?.toDoubleOrNull()
-                        parent.long = it.lon?.toDoubleOrNull()
-                        parent.address = it.address
+                         var current : Address? = null
+                      action. data?.forEach {
+                            if(it.current==1) {
+                                current = it
+                            }
+                        }
+                    if(current==null)checkLocation()
+                    else {
+                        parent.lat = current?.lat?.toDoubleOrNull()
+                        parent.long = current?.lon?.toDoubleOrNull()
+                        parent.address = current?.address
                         binding?.tvAddress?.text = parent.address
                         mViewModel.getAllLaundries(parent.lat.toString(), parent.long.toString())
                         mViewModel.getNearestLaundries(
@@ -168,7 +182,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), LaundryClickListener {
         binding.tvAllNear.setPaintFlags(binding.tvAllNear.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
         parent = requireActivity() as MainActivity
         parent.showBottomNav(true)
-
+        binding.etSearch.setText("")
+         binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_GO ||
+                actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND) {
+                findNavController().navigate(
+                    R.id.allLaundriesFragment,
+                    bundleOf(
+                        Constants.All to Constants.SEARCH,
+                        Constants.SEARCH to v.text.toString()
+                    )
+                )
+                true
+            }
+            else {
+                false
+            }
+        }
 
         binding.tvAllLaundries.setOnClickListener {
             findNavController().navigate(

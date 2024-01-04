@@ -1,8 +1,13 @@
 package com.dotjoo.aghsilinicustomer.ui.fragment.main.orderInfo
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Paint
 import android.net.Uri
+import androidx.core.content.ContextCompat.registerReceiver
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +18,8 @@ import com.dotjoo.aghsilinicustomer.data.remote.response.OrderInfoItem
 import com.dotjoo.aghsilinicustomer.data.remote.response.OrderInfoResponse
 import com.dotjoo.aghsilinicustomer.databinding.FragmentOrderInfoBinding
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
- import com.dotjoo.aghsilinicustomer.ui.adapter.order.OrderInfoItemsAdapter
+import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity.Companion.MAIN_SCREEN_ACTION
+import com.dotjoo.aghsilinicustomer.ui.adapter.order.OrderInfoItemsAdapter
 import com.dotjoo.aghsilinicustomer.ui.dialog.ComplainBotomSheetFragment
 import com.dotjoo.aghsilinicustomer.ui.dialog.OnClickLoginFirst
 import com.dotjoo.aghsilinicustomer.ui.dialog.RateBotomSheetFragment
@@ -21,6 +27,7 @@ import com.dotjoo.aghsilinicustomer.ui.fragment.main.order.OrderAction
 import com.dotjoo.aghsilinicustomer.ui.fragment.main.order.OrderViewModel
 import com.dotjoo.aghsilinicustomer.util.Constants
 import com.dotjoo.aghsilinicustomer.util.SimpleDividerItemDecoration
+import com.dotjoo.aghsilinicustomer.util.ext.getMyData
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
 import com.dotjoo.aghsilinicustomer.util.ext.init
 import com.dotjoo.aghsilinicustomer.util.ext.loadImage
@@ -35,11 +42,24 @@ class OrderInfoFragment : BaseFragment<FragmentOrderInfoBinding>() {
     var list = arrayListOf<OrderInfoItem>()
     var orderId:String ? = null
     var orderInfo:OrderInfoResponse ? = null
+    private val reciever = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+
+            var data: String? = intent.getMyData<String>(Constants.Notifaction)
+            if (data == null) {
+            } else {
+                   orderId = data
+                orderId?.let { mViewModel.getOrderInfo(it) }
+
+            }
+        }
+    }
 
     override fun onFragmentReady() {
         initAdapters()
         onClick()
-       if((arguments?.getString(Constants.ORDER_ID )!= null)){
+       requireContext(). registerReceiver(reciever, IntentFilter(MAIN_SCREEN_ACTION))
+        if((arguments?.getString(Constants.ORDER_ID )!= null)){
                orderId =arguments?.getString(Constants.ORDER_ID)
            }
            else{
@@ -72,6 +92,8 @@ class OrderInfoFragment : BaseFragment<FragmentOrderInfoBinding>() {
             is OrderAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                     showProgress(false)
@@ -106,7 +128,7 @@ findNavController().navigateUp()            }
             binding.tvAddValue.setText(it.order?.additional_cost + " " + resources.getString(R.string.sr))
             binding.tvUrgent.isVisible = (it.order?.argent == 1)
             binding.tvLaundryName.setText(it?.order?.laundry?.name)
-            binding.tvAddress2.setText(it?.order?.laundry?.address)
+            binding.tvAddress.setText(it?.order?.laundry?.address)
             binding.tvRateCount.setText(it?.order?.laundry?.rate)
             binding.ivlogo.loadImage(it?.order?.laundry?.logo)
           binding.cardCall.setOnClickListener {

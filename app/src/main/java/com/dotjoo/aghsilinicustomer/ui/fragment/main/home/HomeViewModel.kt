@@ -9,9 +9,9 @@ import com.dotjoo.aghsilinicustomer.base.BaseViewModel
 import com.dotjoo.aghsilinicustomer.base.SearchParam
 import com.dotjoo.aghsilinicustomer.data.Param.LaundryReviewParam
 import com.dotjoo.aghsilinicustomer.data.remote.response.*
+import com.dotjoo.aghsilinicustomer.domain.AddressUseCase
 import com.dotjoo.aghsilinicustomer.domain.AllLaundriesPagingUseCase
-import com.dotjoo.aghsilinicustomer.domain.BasketUseCase
-import com.dotjoo.aghsilinicustomer.domain.HomeUseCase
+ import com.dotjoo.aghsilinicustomer.domain.HomeUseCase
 import com.dotjoo.aghsilinicustomer.domain.SearchAllLaundriesPagingUseCase
 import com.dotjoo.aghsilinicustomer.util.NetworkConnectivity
 import com.dotjoo.aghsilinicustomer.util.Resource
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel
-@Inject constructor(app: Application, val useCase: HomeUseCase, val useCaseAllLaundriesPaging: AllLaundriesPagingUseCase, val useCaseSearch: SearchAllLaundriesPagingUseCase,val useCaseFcm: UpdateFcmUseCase ) :
+@Inject constructor(app: Application, val useCase: HomeUseCase,  val useCaseAddress: AddressUseCase, val useCaseAllLaundriesPaging: AllLaundriesPagingUseCase, val useCaseSearch: SearchAllLaundriesPagingUseCase,val useCaseFcm: UpdateFcmUseCase ) :
     BaseViewModel<HomeAction>(app) {
 
     fun getNearestLaundries( lat:String , long: String) {
@@ -77,21 +77,16 @@ class HomeViewModel
             produce(HomeAction.ShowLoading(true))
 
             viewModelScope.launch {
-                var res = useCase.invoke(
-                    viewModelScope , BasketUseCase.ALL_ADDRESS
+                var res = useCaseAddress.invoke(
+                    viewModelScope
                 )
                 { res ->
                     when (res) {
                         is Resource.Failure -> produce(HomeAction.ShowFailureMsg(res.message.toString()))
                         is Resource.Progress -> produce(HomeAction.ShowLoading(res.loading))
                         is Resource.Success -> {
-                            var current :Address? = null
-                            (    res.data?.data as AllAddressResponse). address?.forEach {
-                             if(it.current==1) {
-                                 current = it
-                              }
-                            }
-                            produce(HomeAction.ShowCurrent(current))
+
+                            produce(HomeAction.ShowCurrent( (  res.data?.data as AllAddressResponse). address))
                         }
                     }
                 }

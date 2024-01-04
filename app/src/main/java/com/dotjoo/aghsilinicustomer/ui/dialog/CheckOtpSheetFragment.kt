@@ -3,6 +3,8 @@ package com.dotjoo.aghsilinicustomer.ui.dialog
 import android.annotation.SuppressLint
 import android.app.Dialog
  import android.os.Bundle
+import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +15,28 @@ import androidx.navigation.fragment.findNavController
 import com.dotjoo.aghsilinicustomer.R
  import com.dotjoo.aghsilinicustomer.databinding.DialogCheckOtpBinding
  import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthAction
-import com.dotjoo.aghsilinicustomer.ui.fragment.auth.login.AuthViewModel
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthAction
+import com.dotjoo.aghsilinicustomer.ui.fragment.auth.forget_password.login.AuthViewModel
  import com.dotjoo.aghsilinicustomer.util.ToastUtils
 import com.dotjoo.aghsilinicustomer.util.ToastUtils.Companion.showToast
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
  import com.dotjoo.aghsilinicustomer.util.observe
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthSettings
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.PhoneMultiFactorGenerator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 interface OnPhoneCheckedWithOtp{
     fun onClick(country_code: String,phone: String,verifed: Boolean )
@@ -34,7 +47,11 @@ class CheckOtpSheetFragment(val country_code: String, val phone: String , val on
     private lateinit var binding: DialogCheckOtpBinding
     private lateinit var parent: MainActivity
     val mViewModel: AuthViewModel by viewModels()
-
+    private var auth: FirebaseAuth = Firebase.auth
+     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    lateinit var phoneAuthProvider:PhoneAuthProvider.ForceResendingToken
+    var verifiedOtp =""
+    var otp =""
     companion object {
         fun newInstance(country_code: String, phone: String,onClick:OnPhoneCheckedWithOtp  ): CheckOtpSheetFragment {
             val args = Bundle()
@@ -51,6 +68,8 @@ class CheckOtpSheetFragment(val country_code: String, val phone: String , val on
     ): View {
 
         binding = DialogCheckOtpBinding.inflate(inflater)
+        sendVerfaction(country_code+phone)
+        counterDawn()
          onClick()
         mViewModel.apply {
             observe(viewState) {
@@ -61,6 +80,92 @@ class CheckOtpSheetFragment(val country_code: String, val phone: String , val on
 
         return binding.root
     }
+    private var restTimer: CountDownTimer? = null
+
+    private fun counterDawn() {
+        binding.tvResend.isEnabled = false
+        binding.tvResend.setTextColor(resources.getColor(R.color.grey_400))
+        binding.tvTimer.setTextColor(resources.getColor(R.color.grey_400))
+
+        restTimer = object : CountDownTimer(120000, 1000) {
+
+
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds: Long = millisUntilFinished / 1000 % 60
+                val minutes: Long = (millisUntilFinished - seconds) / 1000 / 60
+                binding.tvTimer.text = "" + minutes + ":" + seconds
+                Log.d(
+                    "remainingremaining g", ("" + minutes + ":" + seconds).toString()
+                )
+            }
+
+
+            override fun onFinish() {
+                binding.tvResend.setText(resources.getString(R.string.resend))
+                binding.tvTimer.text = ""
+                binding.tvResend.isEnabled = true
+                binding.tvResend.setTextColor(resources.getColor(R.color.black))
+
+
+            }
+        }.start()
+    }
+
+        private fun sendVerfaction(phoneNumber:String) {
+            callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                 //   showToast(requireContext(),"com")
+                    //     binsding?.btnGetOtp?.visibility = View.VISIBLE
+                }
+
+                override fun onVerificationFailed(p0: FirebaseException) {
+                    //     binding?.btnGetOtp?.visibility = View.VISIBLE
+                    showToast(requireContext(),p0.message.toString())
+                }
+
+                override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                    super.onCodeSent(p0, p1)
+                    showToast(requireContext(),p0)
+                    verifiedOtp=p0
+                    phoneAuthProvider=p1    //   fragmentInputOtpBinding?.btnGetOtp?.visibility = View.VISIBLE
+                    //     moveToVerifyOtp(p0)
+                }
+            }
+
+            val options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(phoneNumber) // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(requireActivity()) // Activity (for callback binding)
+                .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+                .build()
+            PhoneAuthProvider.verifyPhoneNumber(options)    }
+
+        private fun verfyOtp() {
+            var credential= PhoneAuthProvider.getCredential(verifiedOtp, otp)
+            signin(credential)
+            val multiFactorAssertion
+                    = PhoneMultiFactorGenerator.getAssertion(credential)
+
+        }
+
+        private fun signin(credential: PhoneAuthCredential) {
+            auth.signInWithCredential(credential).addOnCompleteListener(OnCompleteListener {
+                if (it.isSuccessful) {
+                    if (it.isSuccessful) {
+                        Log.i("cccccccccccc","sucess")
+                     onClick.onClick(country_code, phone, true)
+                        dismiss()
+                    }else{
+                        showToast(requireContext(),resources.getString(R.string.wrongotp))
+                        Log.i("cccccccccccccccc","false")
+
+                    }
+                }
+
+            })
+
+        }
+
 
     fun handleViewState(action: AuthAction) {
         when (action) {
@@ -74,19 +179,14 @@ class CheckOtpSheetFragment(val country_code: String, val phone: String , val on
             is AuthAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
+                }else if (it.contains("aghsilini.com") == true) {
+                    showToast(requireContext(),resources.getString(R.string.connection_error))
                 } else {
                     ToastUtils.showToast(requireContext(), action.message)
                     showProgress(false)
                 }
             }
 
-
-            is AuthAction.OtpChecked -> {
-                 showProgress(false)
-                onClick.onClick(country_code, phone, true)
-                dismiss()
-
-            }
 
 
 
@@ -107,13 +207,14 @@ class CheckOtpSheetFragment(val country_code: String, val phone: String , val on
                     .isNullOrEmpty()
             ) showToast(requireContext(), resources.getString(R.string.msg_empty_otp))
             else {
-                mViewModel.otp = binding.etOtp.otp.toString()
-                mViewModel.checkOtp(
-                    country_code, phone, mViewModel.otp.toString()
-                )
+            otp = binding.etOtp.otp.toString()
+                verfyOtp()
             }
         }
-
+        binding.tvResend.setOnClickListener {
+            sendVerfaction(country_code+mViewModel.phone)
+            counterDawn()
+        }
     }
 
 

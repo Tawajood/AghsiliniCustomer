@@ -140,7 +140,7 @@
             android:layout_height="@dimen/_47sdp"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_30sdp"
-            android:backgroundTint="@color/blue"
+            android:textAllCaps="false"            android:backgroundTint="@color/blue"
             android:text="@string/send"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"

@@ -30,12 +30,7 @@ class HomeUseCase @Inject constructor(private val repository: Repository):
                   emit(repository.getLaundryReview(params))
                 } as Flow<NetworkResponse<DevResponse<Any>, ErrorResponse>>
             }
-            else     if (params == BasketUseCase.ALL_ADDRESS) {
-                flow {
-                    emit(repository.getAllAddresses( ))
-                } as Flow<NetworkResponse<DevResponse<Any>, ErrorResponse>>
-            }
-            else {
+             else {
                 flow {
                     emit(repository.getSlider())
                 } as Flow<NetworkResponse<DevResponse<Any>, ErrorResponse>>

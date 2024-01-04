@@ -49,6 +49,20 @@ fun Activity.showKeyboard() = WindowInsetsControllerCompat(window, window.decorV
 fun Activity.hideKeyboard() =
     WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.ime())
 
+inline fun <reified T> Intent?.getMyData(key: String): T? {
+    if (this == null) {
+        return null
+    }
+    return if (hasExtra(key)) {
+        try {
+            extras!!.get(key) as T
+        } catch (e: Exception) {
+            null
+        }
+    } else {
+        null
+    }
+}
 
 fun LifecycleOwner.getStatusBarHeight(): Int {
     val res: Resources = if (this is AppCompatActivity) {

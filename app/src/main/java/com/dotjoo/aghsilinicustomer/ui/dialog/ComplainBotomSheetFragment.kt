@@ -75,6 +75,11 @@ class ComplainBotomSheetFragment(val lan: Laundry, val order_Id: String, ) :
             is OrderAction.ShowFailureMsg -> action.message?.let {
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
+                }else if (it.contains("aghsilini.com") == true) {
+                    ToastUtils.showToast(
+                        requireContext(),
+                        resources.getString(R.string.connection_error)
+                    )
                 } else {
                     ToastUtils.showToast(requireContext(), action.message)
                     showProgress(false)

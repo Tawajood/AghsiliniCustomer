@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -41,6 +42,7 @@ import javax.inject.Inject
 class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), LaundryClickListener {
 
     private var state: String? = null
+    private var searchWordFromHome: String? = ""
     var adapterNearLaundries: NearLaundriesAdapter? = null
     var adapterTopLaundries: AllLaundriesPagingAdapter? = null
 
@@ -55,18 +57,30 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
     var lang: String? = null
     override fun onFragmentReady() {
         state = arguments?.getString(Constants.All)
+        if (state == Constants.SEARCH) {
+            arguments?.getString(Constants.SEARCH)?.let {
+                searchWordFromHome = it
+                mViewModel.searchLaundry(it)
+            }
+        } else {
+            checkLocation()
 
+        }
         onclick()
         mViewModel.apply {
-            checkLocation()
             observe(viewState) {
                 handleViewState(it)
             }
 
         }
         binding.swiperefreshHome.setOnRefreshListener {
-            checkLocation()
-            //mViewModel.getAllLaundries(lat,lang)
+            if (state == Constants.SEARCH) {
+                searchWordFromHome?.let { mViewModel.searchLaundry(it) }
+                }
+            else {
+                checkLocation()
+
+            }            //mViewModel.getAllLaundries(lat,lang)
             if (binding.swiperefreshHome != null) binding.swiperefreshHome.isRefreshing = false
         }
     }
@@ -85,6 +99,8 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                     showProgress(false)
@@ -96,7 +112,8 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
                     adapterTopLaundries?.submitData(action.data)
                 }
             }
-  is HomeAction.ShowSearchResult -> {
+
+            is HomeAction.ShowSearchResult -> {
                 lifecycleScope.launchWhenCreated {
                     adapterTopLaundries?.submitData(action.data)
                 }
@@ -126,15 +143,16 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
             findNavController().navigateUp()
         }
         binding.icClearTxt.setOnClickListener {
-        if(!binding.etSearch.text.isNullOrEmpty()) {
-            binding.etSearch.setText("")
-            checkLocation()
+            if (!binding.etSearch.text.isNullOrEmpty()) {
+                binding.etSearch.setText("")
+                checkLocation()
+            }
         }
-        }
-        if (state == Constants.ALL_ALUNDRY) {
+        if (state == Constants.ALL_ALUNDRY||state == Constants.SEARCH) {
             initAdaptersAll()
-            binding.tvNearestLaundry.setText(resources.getString(R.string.top_rated_laundry))
-            binding.etSearch.addTextChangedListener(object : TextWatcher {
+            searchWordFromHome?.let {      binding.etSearch.setText(searchWordFromHome) }
+        binding.tvNearestLaundry.setText(resources.getString(R.string.top_rated_laundry))
+/*            binding.etSearch.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     mViewModel.searchLaundry(s.toString())
                 }
@@ -146,7 +164,19 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 }
-            })
+            })*/
+            binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_GO ||
+                    actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND) {
+                    mViewModel.searchLaundry(v.text.toString())
+
+                    true
+                }
+                else {
+                    false
+                }
+            }
+
         } else {
             initAdaptersNear()
             binding.tvNearestLaundry.setText(resources.getString(R.string.nearest_laundries))
@@ -269,11 +299,11 @@ class AllLaundriesFragment : BaseFragment<FragmentAllLaundriesBinding>(), Laundr
             lat?.let {
                 if (state == Constants.ALL_ALUNDRY) {
 
-                     mViewModel.getAllLaundries(it, lang!!)
+                    mViewModel.getAllLaundries(it, lang!!)
 
                 } else {
 
-                     mViewModel.getNearestLaundries(it, lang!!)
+                    mViewModel.getNearestLaundries(it, lang!!)
                 }
             }
         }

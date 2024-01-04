@@ -14,7 +14,6 @@ import com.dotjoo.aghsilinicustomer.ui.fragment.main.basket.CreateOrderViewModel
 import com.dotjoo.aghsilinicustomer.ui.fragment.auth.register.MapBottomSheet
 import com.dotjoo.aghsilinicustomer.ui.lisener.OnAddressAddesClickLisener
 import com.dotjoo.aghsilinicustomer.ui.lisener.OnAllAddressClickLisener
-import com.dotjoo.aghsilinicustomer.util.ToastUtils
 import com.dotjoo.aghsilinicustomer.util.ext.hideKeyboard
 import com.dotjoo.aghsilinicustomer.util.ext.init
 import com.dotjoo.aghsilinicustomer.util.observe
@@ -24,7 +23,8 @@ import kotlinx.android.synthetic.main.toolbar.view.card_back
 @AndroidEntryPoint
 class AddressFragment : BaseFragment<FragmentAddressBinding>(), OnAllAddressClickLisener {
     val mViewModel: CreateOrderViewModel by viewModels()
-var positionToDelete :Int?  =null
+    var positionToDelete: Int? = null
+    var positionToDefault: Int? = null
     lateinit var addapter: AllAddressAdapter
     lateinit var parent: MainActivity
 
@@ -58,6 +58,8 @@ var positionToDelete :Int?  =null
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
                 } else {
                     showToast(action.message)
                     showProgress(false)
@@ -69,16 +71,23 @@ var positionToDelete :Int?  =null
                     if (it.size > 0) {
                         addapter.addressList = it
                         addapter.notifyDataSetChanged()
-                        binding.rvLaundies.isVisible= true
+                        binding.rvLaundies.isVisible = true
                         binding.lytEmptyState.isVisible = false
                     } else {
-binding.rvLaundies.isVisible= false
+                        binding.rvLaundies.isVisible = false
                         binding.lytEmptyState.isVisible = true
                     }
                 }
-            } is CreateOrderAction.AddressDeleted -> {
+            }
 
-            positionToDelete?.let { addapter.deleteItem(action.item, it,) }
+            is CreateOrderAction.AddressDeleted -> {
+
+                positionToDelete?.let { addapter.deleteItem(action.item, it) }
+            }
+
+            is CreateOrderAction.AddressDefault -> {
+
+                mViewModel.getAllAddresses()
             }
 
             else -> {
@@ -114,7 +123,9 @@ binding.rvLaundies.isVisible= false
         item?.let { mViewModel.deleteAddress(it) }
     }
 
-    override fun onDefaultAddressClickLisener(item: Address) {
-     }
+    override fun onDefaultAddressClickLisener(item: Address, position: Int) {
+        this.positionToDefault = position
+        item?.let { mViewModel.changeCurrentAddressParam(it) }
+    }
 
 }

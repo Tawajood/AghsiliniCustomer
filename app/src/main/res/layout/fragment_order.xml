@@ -17,8 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutDirection="rtl"
-            tools:context=".ui.fragment.order.OrderFragment">
+             tools:context=".ui.fragment.order.OrderFragment">
 
             <include
                 android:id="@+id/toolbar"
@@ -174,7 +173,7 @@
                             android:layout_gravity="start"
                             android:layout_marginHorizontal="@dimen/_15sdp"
                             android:layout_marginVertical="@dimen/_20sdp"
-                            android:backgroundTint="@color/blue"
+                      android:textAllCaps="false"      android:backgroundTint="@color/blue"
                             android:drawableEnd="@drawable/ic_add_white"
                             android:gravity="start|center_vertical"
                             android:text="@string/make_order_now"

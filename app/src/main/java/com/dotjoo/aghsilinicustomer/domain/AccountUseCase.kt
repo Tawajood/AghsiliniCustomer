@@ -5,6 +5,7 @@ import com.dotjoo.aghsilinicustomer.base.DevResponse
 import com.dotjoo.aghsilinicustomer.base.ErrorResponse
 import com.dotjoo.aghsilinicustomer.base.NetworkResponse
 import com.dotjoo.aghsilinicustomer.data.Param.ChangePasswordParams
+import com.dotjoo.aghsilinicustomer.data.Param.UpdatePhoneParam
 import com.dotjoo.aghsilinicustomer.data.Param.UpdateProfileParam
 import com.dotjoo.aghsilinicustomer.data.Repository
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -30,6 +31,10 @@ class AccountUseCase @Inject constructor(private val repository: Repository) :
         } else if (params is ChangePasswordParams) {
             flow {
                 emit(repository.changePass(params))
+            } as Flow<NetworkResponse<DevResponse<Any>, ErrorResponse>>
+        }  else if (params is UpdatePhoneParam) {
+            flow {
+                emit(repository.changrPhone(params))
             } as Flow<NetworkResponse<DevResponse<Any>, ErrorResponse>>
         } else if (params == Profile) {
             flow {

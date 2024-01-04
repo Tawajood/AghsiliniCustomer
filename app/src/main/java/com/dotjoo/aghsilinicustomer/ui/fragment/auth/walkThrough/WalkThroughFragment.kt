@@ -6,8 +6,12 @@ import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.dotjoo.aghsilinicustomer.R
 import com.dotjoo.aghsilinicustomer.base.BaseFragment
+import com.dotjoo.aghsilinicustomer.data.PrefsHelper
 import com.dotjoo.aghsilinicustomer.databinding.FragmentWalkThroughBinding
+import com.dotjoo.aghsilinicustomer.ui.activity.AuthActivity
 import com.dotjoo.aghsilinicustomer.ui.activity.MainActivity
+import com.dotjoo.aghsilinicustomer.util.Constants
+import com.dotjoo.aghsilinicustomer.util.ext.showActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class WalkThroughFragment :  BaseFragment<FragmentWalkThroughBinding>() {
@@ -73,7 +77,30 @@ binding.ivNext.isVisible= true
     }
 
     private fun onClick() {
-       binding.lytNext.setOnClickListener {
+
+        if (PrefsHelper.getLanguage() == Constants.AR) {
+            binding.tvLang.text = "EN"
+        } else {
+            binding.tvLang.text = "العربية"
+        }
+
+        binding.tvLang.setOnClickListener {
+            if (PrefsHelper.getLanguage() == Constants.EN) {
+                PrefsHelper.setLanguage(Constants.AR)
+                var intent = Intent(activity, AuthActivity::class.java)
+                intent.putExtra(Constants.Start, Constants.WALK_THROUGHT)
+                activity?. startActivity(intent)
+                activity?.finish()
+
+            } else {
+                PrefsHelper.setLanguage(Constants.EN)
+                var intent = Intent(activity, AuthActivity::class.java)
+                intent.putExtra(Constants.Start, Constants.WALK_THROUGHT)
+                activity?. startActivity(intent)
+                activity?.finish()
+             }
+        }
+        binding.lytNext.setOnClickListener {
             if (pos == 0  )
                 goNext()
             else

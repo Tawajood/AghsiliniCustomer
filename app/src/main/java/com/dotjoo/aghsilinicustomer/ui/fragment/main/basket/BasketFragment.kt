@@ -58,7 +58,9 @@ class BasketFragment : BaseFragment<FragmentBasketBinding>(), ItemsInBasketClick
                 if (it.contains("401") == true) {
                     findNavController().navigate(R.id.loginFirstBotomSheetFragment)
 
-                } else {
+                } else if (it.contains("aghsilini.com") == true) {
+                    showToast(resources.getString(R.string.connection_error))
+                }else {
                     showToast(action.message)
                     showProgress(false)
                 }
@@ -91,8 +93,13 @@ adapter.removeItem(action.position)
         binding.tvSubTotalValue.setText(data.totalItemsPrice + " " + resources.getString(R.string.sr))
         binding.tvTotalValue.setText(data.total + " " + resources.getString(R.string.sr))
         binding.tvTaxValue.setText(data.tax + " " + resources.getString(R.string.sr))
-
+binding.cardUrgent.isVisible= data.urgent==1
         loadItems(data.cartitems)
+     var count =0
+        data.cartitems.forEach {
+            count =count + it.count
+        }
+        binding.tvItemsCountValue.setText(count.toString()+" "+ resources.getText(R.string.items))
      }
 
 
